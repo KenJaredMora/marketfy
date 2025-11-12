@@ -1,4 +1,4 @@
-import { Injectable, signal } from '@angular/core';
+import { Injectable, signal, computed } from '@angular/core';
 import { ApiService } from '../../core/services/api.service';
 import { tap } from 'rxjs/operators';
 
@@ -19,6 +19,7 @@ export interface WishlistItemDTO {
 @Injectable({ providedIn: 'root' })
 export class WishlistService {
   items = signal<WishlistItemDTO[]>([]);
+  count = computed(() => this.items().length);
 
   constructor(private api: ApiService) {}
 

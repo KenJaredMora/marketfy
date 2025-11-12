@@ -4,11 +4,12 @@ import { OrdersService, Order } from '../../orders.service';
 import { RouterLink } from '@angular/router';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 @Component({
   standalone: true,
   selector: 'app-orders',
-  imports: [CommonModule, RouterLink, MatFormFieldModule, MatInputModule],
+  imports: [CommonModule, RouterLink, MatFormFieldModule, MatInputModule, MatProgressSpinnerModule],
   template: `
   <div style="max-width:900px;margin:auto;padding:16px">
     <h2>Order History</h2>
@@ -17,7 +18,12 @@ import { MatInputModule } from '@angular/material/input';
       <input matInput placeholder="Search by Order ID…" (input)="q = $any($event.target).value">
     </mat-form-field>
 
-    <table *ngIf="filtered().length; else empty" style="width:100%;border-collapse:collapse">
+    <div *ngIf="loading" style="text-align:center;padding:32px">
+      <mat-spinner diameter="50" style="margin:auto"></mat-spinner>
+      <p>Loading orders...</p>
+    </div>
+
+    <table *ngIf="!loading && filtered().length; else empty" style="width:100%;border-collapse:collapse">
       <thead><tr><th align="left">Order ID</th><th>Date</th><th align="right">Total</th><th></th></tr></thead>
       <tbody>
         <tr *ngFor="let o of filtered()" style="border-top:1px solid #eee">
@@ -29,16 +35,38 @@ import { MatInputModule } from '@angular/material/input';
       </tbody>
     </table>
 
-    <ng-template #empty><p style="padding:24px;text-align:center">No orders found.</p></ng-template>
+    <ng-template #empty>
+      <p *ngIf="!loading" style="padding:24px;text-align:center">No orders found.</p>
+    </ng-template>
   </div>
   `
 })
 export class OrdersComponent {
   q = '';
-  constructor(private orders: OrdersService) {}
+  orders: Order[] = [];
+  loading = true;
+
+  constructor(private ordersService: OrdersService) {
+    this.loadOrders();
+  }
+
+  loadOrders() {
+    this.ordersService.getAll().subscribe({
+      next: (response) => {
+        this.orders = response.data;
+        this.loading = false;
+      },
+      error: (error) => {
+        console.error('Failed to load orders:', error);
+        this.loading = false;
+      }
+    });
+  }
+
   filtered(): Order[] {
-    const all = this.orders.getAll();
     const q = this.q.trim().toLowerCase();
-    return q ? all.filter(o => o.orderId.toLowerCase().includes(q)) : all;
+    return q
+      ? this.orders.filter(o => o.orderId.toLowerCase().includes(q))
+      : this.orders;
   }
 }

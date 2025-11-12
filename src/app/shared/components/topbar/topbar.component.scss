@@ -1,0 +1,119 @@
+.topbar {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+.topbar-container {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 16px;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 24px;
+  font-weight: 700;
+  text-decoration: none;
+  color: white;
+  cursor: pointer;
+  transition: opacity 0.3s ease;
+
+  &:hover {
+    opacity: 0.9;
+  }
+
+  mat-icon {
+    font-size: 28px;
+    width: 28px;
+    height: 28px;
+  }
+}
+
+.nav-links {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+
+  a {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+
+    mat-icon {
+      font-size: 20px;
+      width: 20px;
+      height: 20px;
+    }
+  }
+}
+
+.cart-button {
+  position: relative;
+
+  mat-icon {
+    font-size: 24px;
+    width: 24px;
+    height: 24px;
+  }
+}
+
+.login-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+
+  mat-icon {
+    font-size: 20px;
+    width: 20px;
+    height: 20px;
+  }
+}
+
+// Mobile menu button (hidden on desktop)
+.mobile-menu-button {
+  display: none;
+}
+
+// Responsive Design
+@media (max-width: 768px) {
+  .topbar-container {
+    padding: 0 8px;
+  }
+
+  .brand-text {
+    font-size: 18px;
+  }
+
+  // Hide desktop navigation on mobile
+  .desktop-nav {
+    display: none !important;
+  }
+
+  // Show mobile menu button
+  .mobile-menu-button {
+    display: flex;
+  }
+
+  // Hide login button text on mobile
+  .login-btn span {
+    display: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .brand-text {
+    display: none;
+  }
+
+  .topbar-container {
+    gap: 8px;
+  }
+}

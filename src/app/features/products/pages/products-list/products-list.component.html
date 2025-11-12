@@ -1,22 +1,81 @@
-<div style="padding:16px">
-  <mat-form-field appearance="outline" style="width:100%;max-width:420px;">
-    <input matInput placeholder="Search products…" (input)="ps.search.set($any($event.target).value)" />
-  </mat-form-field>
-</div>
+<div class="products-page">
+  <!-- Search and Filter Section -->
+  <div class="search-section">
+    <div class="container">
+      <h1 class="page-title">Discover Products</h1>
+      <div class="search-bar">
+        <mat-form-field appearance="outline" class="search-field">
+          <mat-icon matPrefix>search</mat-icon>
+          <input matInput
+                 placeholder="Search for products..."
+                 (input)="ps.search.set($any($event.target).value)"
+                 [value]="ps.search()" />
+        </mat-form-field>
+      </div>
+      <div class="results-info">
+        <span class="results-count">{{ ps.total() }} products found</span>
+      </div>
+    </div>
+  </div>
 
-<div class="grid">
-  <app-product-card
-    *ngFor="let p of ps.pageItems()"
-    [product]="p"
-    (addToCart)="add($event)">
-  </app-product-card>
-</div>
+  <!-- Products Grid -->
+  <div class="container">
+    <!-- Loading State -->
+    <div class="loading-overlay" *ngIf="isTransitioning() && !imagesLoaded()">
+      <mat-spinner diameter="60"></mat-spinner>
+      <p class="loading-text">Loading products...</p>
+    </div>
 
-<div style="display:flex;gap:8px;justify-content:center;align-items:center;padding:16px">
-  <button mat-stroked-button (click)="setPage(ps.page()-1)" [disabled]="ps.page()===1">Prev</button>
-  <span>Page {{ ps.page() }} / {{ totalPages }}</span>
-  <button mat-stroked-button
-          (click)="setPage(ps.page()+1)"
-          [disabled]="ps.page() >= totalPages">Next</button>
+    <!-- Products Grid with Fade Animation -->
+    <div class="grid"
+         *ngIf="ps.pageItems().length > 0; else noProducts"
+         [@fadeIn]="imagesLoaded() ? 'visible' : 'hidden'"
+         [class.grid-loading]="isTransitioning() && !imagesLoaded()">
+      <app-product-card
+        *ngFor="let p of ps.pageItems(); let i = index"
+        [product]="p"
+        (addToCart)="add($event)"
+        [@staggerIn]="imagesLoaded() ? i : null">
+      </app-product-card>
+    </div>
+
+    <!-- No Products State -->
+    <ng-template #noProducts>
+      <div class="empty-state" *ngIf="!isTransitioning()">
+        <mat-icon class="empty-icon">inventory_2</mat-icon>
+        <h2>No products found</h2>
+        <p>Try adjusting your search or filters</p>
+      </div>
+    </ng-template>
+
+    <!-- Pagination -->
+    <div class="pagination" *ngIf="ps.pageItems().length > 0">
+      <button mat-icon-button
+              (click)="setPage(1)"
+              [disabled]="ps.page() === 1"
+              aria-label="First page">
+        <mat-icon>first_page</mat-icon>
+      </button>
+      <button mat-raised-button
+              (click)="setPage(ps.page()-1)"
+              [disabled]="ps.page() === 1">
+        <mat-icon>chevron_left</mat-icon>
+        Previous
+      </button>
+      <span class="page-info">Page {{ ps.page() }} of {{ totalPages }}</span>
+      <button mat-raised-button
+              (click)="setPage(ps.page()+1)"
+              [disabled]="ps.page() >= totalPages">
+        Next
+        <mat-icon>chevron_right</mat-icon>
+      </button>
+      <button mat-icon-button
+              (click)="setPage(totalPages)"
+              [disabled]="ps.page() >= totalPages"
+              aria-label="Last page">
+        <mat-icon>last_page</mat-icon>
+      </button>
+    </div>
+  </div>
 </div>
 

@@ -1,1 +1,139 @@
-<p>cart works!</p>
+<div class="cart-page">
+  <div class="container">
+    <div class="cart-header">
+      <h1>
+        <mat-icon>shopping_cart</mat-icon>
+        Shopping Cart
+      </h1>
+    </div>
+
+    <ng-container *ngIf="(cart.items$ | async) as items">
+      <!-- Cart Items -->
+      <div *ngIf="items.length > 0; else emptyCart" class="cart-content">
+        <!-- Items List -->
+        <div class="cart-items">
+          <mat-card *ngFor="let item of items" class="cart-item-card">
+            <div class="cart-item">
+              <!-- Product Image -->
+              <div class="item-image">
+                <img [src]="item.product.imageUrl || 'https://via.placeholder.com/150?text=' + item.product.name"
+                     [alt]="item.product.name">
+              </div>
+
+              <!-- Product Info -->
+              <div class="item-info">
+                <h3 class="item-name">{{ item.product.name }}</h3>
+                <p class="item-description" *ngIf="item.product.description">
+                  {{ item.product.description | slice:0:100 }}{{ item.product.description.length > 100 ? '...' : '' }}
+                </p>
+                <div class="item-price-mobile">
+                  ${{ item.product.price | number:'1.2-2' }}
+                </div>
+              </div>
+
+              <!-- Quantity Controls -->
+              <div class="item-quantity">
+                <label>Quantity</label>
+                <div class="quantity-controls">
+                  <button mat-icon-button
+                          (click)="dec(item.product.id)"
+                          [attr.aria-label]="'Decrease quantity'">
+                    <mat-icon>remove</mat-icon>
+                  </button>
+                  <span class="quantity-value">{{ item.qty }}</span>
+                  <button mat-icon-button
+                          (click)="inc(item.product.id)"
+                          [attr.aria-label]="'Increase quantity'">
+                    <mat-icon>add</mat-icon>
+                  </button>
+                </div>
+              </div>
+
+              <!-- Price -->
+              <div class="item-price">
+                <label>Price</label>
+                <div class="price-value">${{ item.product.price | number:'1.2-2' }}</div>
+              </div>
+
+              <!-- Total -->
+              <div class="item-total">
+                <label>Total</label>
+                <div class="total-value">${{ getItemTotal(item.product.price, item.qty) | number:'1.2-2' }}</div>
+              </div>
+
+              <!-- Remove Button -->
+              <div class="item-actions">
+                <button mat-icon-button
+                        color="warn"
+                        (click)="remove(item.product.id)"
+                        [attr.aria-label]="'Remove ' + item.product.name">
+                  <mat-icon>delete</mat-icon>
+                </button>
+              </div>
+            </div>
+          </mat-card>
+        </div>
+
+        <!-- Order Summary -->
+        <div class="order-summary">
+          <mat-card>
+            <mat-card-header>
+              <mat-card-title>Order Summary</mat-card-title>
+            </mat-card-header>
+            <mat-card-content>
+              <div class="summary-row">
+                <span>Subtotal ({{ items.length }} items)</span>
+                <span class="summary-value">${{ (cart.total$ | async) | number:'1.2-2' }}</span>
+              </div>
+              <div class="summary-row">
+                <span>Shipping</span>
+                <span class="summary-value shipping-free">FREE</span>
+              </div>
+              <mat-divider></mat-divider>
+              <div class="summary-row total-row">
+                <span class="total-label">Total</span>
+                <span class="total-amount">${{ (cart.total$ | async) | number:'1.2-2' }}</span>
+              </div>
+            </mat-card-content>
+            <mat-card-actions>
+              <a mat-raised-button
+                 color="primary"
+                 routerLink="/checkout"
+                 class="checkout-btn">
+                <mat-icon>payment</mat-icon>
+                Proceed to Checkout
+              </a>
+              <button mat-stroked-button
+                      (click)="clearCart()"
+                      class="clear-btn">
+                <mat-icon>delete_sweep</mat-icon>
+                Clear Cart
+              </button>
+            </mat-card-actions>
+          </mat-card>
+
+          <!-- Continue Shopping -->
+          <a mat-stroked-button
+             routerLink="/products"
+             class="continue-shopping">
+            <mat-icon>arrow_back</mat-icon>
+            Continue Shopping
+          </a>
+        </div>
+      </div>
+    </ng-container>
+
+    <!-- Empty Cart State -->
+    <ng-template #emptyCart>
+      <div class="empty-cart">
+        <mat-icon class="empty-icon">remove_shopping_cart</mat-icon>
+        <h2>Your cart is empty</h2>
+        <p>Add some products to get started!</p>
+        <a mat-raised-button color="primary" routerLink="/products">
+          <mat-icon>storefront</mat-icon>
+          Browse Products
+        </a>
+      </div>
+    </ng-template>
+  </div>
+</div>

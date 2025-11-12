@@ -1,1 +1,188 @@
-<p>checkout works!</p>
+<div class="checkout-page">
+  <div class="container">
+    <div class="checkout-header">
+      <h1>
+        <mat-icon>payment</mat-icon>
+        Checkout
+      </h1>
+    </div>
+
+    <div class="checkout-content">
+      <!-- Order Summary Sidebar -->
+      <div class="order-summary-sidebar">
+        <mat-card>
+          <mat-card-header>
+            <mat-card-title>Order Summary</mat-card-title>
+          </mat-card-header>
+          <mat-card-content>
+            <div class="summary-items">
+              <div *ngFor="let item of (items$ | async)" class="summary-item">
+                <span class="item-name">{{ item.product.name }} x{{ item.qty }}</span>
+                <span class="item-price">${{ item.product.price * item.qty | number:'1.2-2' }}</span>
+              </div>
+            </div>
+            <mat-divider></mat-divider>
+            <div class="summary-totals">
+              <div class="summary-row">
+                <span>Subtotal</span>
+                <span>${{ getSubtotal() | number:'1.2-2' }}</span>
+              </div>
+              <div class="summary-row" *ngIf="promoApplied()">
+                <span class="discount-label">
+                  Discount ({{ promoDiscount() * 100 }}%)
+                  <button mat-icon-button (click)="removePromo()" class="remove-promo">
+                    <mat-icon>close</mat-icon>
+                  </button>
+                </span>
+                <span class="discount-value">-${{ getDiscountAmount() | number:'1.2-2' }}</span>
+              </div>
+              <div class="summary-row">
+                <span>Shipping</span>
+                <span *ngIf="shippingCost() === 0" class="free-shipping">FREE</span>
+                <span *ngIf="shippingCost() > 0">${{ shippingCost() | number:'1.2-2' }}</span>
+              </div>
+              <mat-divider></mat-divider>
+              <div class="summary-row total-row">
+                <span>Total</span>
+                <span class="total-amount">${{ getGrandTotal() | number:'1.2-2' }}</span>
+              </div>
+            </div>
+          </mat-card-content>
+        </mat-card>
+      </div>
+
+      <!-- Checkout Form -->
+      <div class="checkout-form-section">
+        <form [formGroup]="form" (ngSubmit)="submit()">
+          <!-- Contact Information -->
+          <mat-card class="form-section">
+            <mat-card-header>
+              <mat-card-title>
+                <mat-icon>person</mat-icon>
+                Contact Information
+              </mat-card-title>
+            </mat-card-header>
+            <mat-card-content>
+              <div class="form-row">
+                <mat-form-field appearance="outline">
+                  <mat-label>Full Name</mat-label>
+                  <input matInput formControlName="name" required>
+                  <mat-icon matPrefix>badge</mat-icon>
+                  <mat-error *ngIf="form.get('name')?.hasError('required')">Name is required</mat-error>
+                  <mat-error *ngIf="form.get('name')?.hasError('minlength')">Name too short</mat-error>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline">
+                  <mat-label>Email</mat-label>
+                  <input matInput formControlName="email" type="email" required>
+                  <mat-icon matPrefix>email</mat-icon>
+                  <mat-error *ngIf="form.get('email')?.hasError('required')">Email is required</mat-error>
+                  <mat-error *ngIf="form.get('email')?.hasError('email')">Invalid email</mat-error>
+                </mat-form-field>
+              </div>
+
+              <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Phone Number</mat-label>
+                <input matInput formControlName="phone" type="tel" required>
+                <mat-icon matPrefix>phone</mat-icon>
+                <mat-error *ngIf="form.get('phone')?.hasError('required')">Phone is required</mat-error>
+                <mat-error *ngIf="form.get('phone')?.hasError('pattern')">Invalid phone (10+ digits)</mat-error>
+              </mat-form-field>
+            </mat-card-content>
+          </mat-card>
+
+          <!-- Shipping Address -->
+          <mat-card class="form-section">
+            <mat-card-header>
+              <mat-card-title>
+                <mat-icon>location_on</mat-icon>
+                Shipping Address
+              </mat-card-title>
+            </mat-card-header>
+            <mat-card-content>
+              <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Street Address</mat-label>
+                <textarea matInput formControlName="address" rows="2" required></textarea>
+                <mat-icon matPrefix>home</mat-icon>
+                <mat-error *ngIf="form.get('address')?.hasError('required')">Address is required</mat-error>
+                <mat-error *ngIf="form.get('address')?.hasError('minlength')">Address too short</mat-error>
+              </mat-form-field>
+
+              <div class="form-row">
+                <mat-form-field appearance="outline">
+                  <mat-label>City</mat-label>
+                  <input matInput formControlName="city" required>
+                  <mat-error *ngIf="form.get('city')?.hasError('required')">City is required</mat-error>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline">
+                  <mat-label>ZIP Code</mat-label>
+                  <input matInput formControlName="zipCode" required>
+                  <mat-error *ngIf="form.get('zipCode')?.hasError('required')">ZIP is required</mat-error>
+                  <mat-error *ngIf="form.get('zipCode')?.hasError('pattern')">Invalid ZIP</mat-error>
+                </mat-form-field>
+              </div>
+            </mat-card-content>
+          </mat-card>
+
+          <!-- Shipping Method -->
+          <mat-card class="form-section">
+            <mat-card-header>
+              <mat-card-title>
+                <mat-icon>local_shipping</mat-icon>
+                Shipping Method
+              </mat-card-title>
+            </mat-card-header>
+            <mat-card-content>
+              <mat-radio-group formControlName="shippingMethod" class="shipping-options">
+                <mat-radio-button *ngFor="let option of shippingOptions" [value]="option.value" class="shipping-option">
+                  <div class="option-content">
+                    <mat-icon>{{ option.icon }}</mat-icon>
+                    <div class="option-info">
+                      <strong>{{ option.label }}</strong>
+                      <span class="option-time">{{ option.time }}</span>
+                    </div>
+                    <span class="option-price">
+                      {{ option.value === 0 ? 'FREE' : ('$' + option.value) }}
+                    </span>
+                  </div>
+                </mat-radio-button>
+              </mat-radio-group>
+            </mat-card-content>
+          </mat-card>
+
+          <!-- Promo Code -->
+          <mat-card class="form-section">
+            <mat-card-header>
+              <mat-card-title>
+                <mat-icon>local_offer</mat-icon>
+                Promo Code
+              </mat-card-title>
+            </mat-card-header>
+            <mat-card-content>
+              <div class="promo-section">
+                <mat-form-field appearance="outline">
+                  <mat-label>Enter promo code</mat-label>
+                  <input matInput formControlName="promoCode" [disabled]="promoApplied()">
+                  <mat-hint>Try: SAVE10, SAVE20, FIRSTORDER</mat-hint>
+                </mat-form-field>
+                <button mat-raised-button type="button" (click)="applyPromoCode()" [disabled]="promoApplied()">
+                  Apply
+                </button>
+              </div>
+            </mat-card-content>
+          </mat-card>
+
+          <!-- Submit -->
+          <div class="form-actions">
+            <button mat-raised-button color="primary" type="submit" [disabled]="processing()" class="place-order-btn">
+              <mat-spinner *ngIf="processing()" diameter="20"></mat-spinner>
+              <mat-icon *ngIf="!processing()">check_circle</mat-icon>
+              {{ processing() ? 'Processing...' : 'Place Order' }}
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

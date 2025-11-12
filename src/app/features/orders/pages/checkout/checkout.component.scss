@@ -1,0 +1,302 @@
+.checkout-page {
+  min-height: calc(100vh - 64px);
+  background: #f5f7fa;
+  padding: 32px 0 48px;
+}
+
+.checkout-header {
+  text-align: center;
+  margin-bottom: 32px;
+
+  h1 {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    font-size: 32px;
+    font-weight: 700;
+    color: #2c3e50;
+    margin: 0;
+
+    mat-icon {
+      font-size: 36px;
+      width: 36px;
+      height: 36px;
+      color: #fb8c00;
+    }
+  }
+}
+
+.checkout-content {
+  display: grid;
+  grid-template-columns: 1fr 380px;
+  gap: 24px;
+  align-items: start;
+
+  @media (max-width: 1024px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.checkout-form-section {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.form-section {
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+
+  ::ng-deep {
+    .mat-mdc-card-header {
+      padding: 20px 20px 0;
+    }
+
+    .mat-mdc-card-title {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 18px;
+      font-weight: 600;
+      color: #2c3e50;
+
+      mat-icon {
+        color: #fb8c00;
+      }
+    }
+
+    .mat-mdc-card-content {
+      padding: 20px;
+    }
+  }
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+}
+
+.full-width {
+  width: 100%;
+}
+
+mat-form-field {
+  width: 100%;
+}
+
+.shipping-options {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.shipping-option {
+  border: 2px solid #e8ecf1;
+  border-radius: 8px;
+  padding: 16px;
+  transition: all 0.3s ease;
+
+  &:hover {
+    border-color: #fb8c00;
+    background: #fff8f0;
+  }
+
+  ::ng-deep .mdc-radio {
+    display: none;
+  }
+
+  &.mat-mdc-radio-checked {
+    border-color: #fb8c00;
+    background: #fff8f0;
+  }
+}
+
+.option-content {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  width: 100%;
+
+  mat-icon {
+    font-size: 32px;
+    width: 32px;
+    height: 32px;
+    color: #fb8c00;
+  }
+}
+
+.option-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+
+  strong {
+    font-size: 16px;
+    color: #2c3e50;
+  }
+
+  .option-time {
+    font-size: 13px;
+    color: #7f8c8d;
+  }
+}
+
+.option-price {
+  font-size: 16px;
+  font-weight: 600;
+  color: #fb8c00;
+}
+
+.promo-section {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+
+  mat-form-field {
+    flex: 1;
+  }
+
+  button {
+    margin-top: 8px;
+    height: 48px;
+  }
+
+  @media (max-width: 600px) {
+    flex-direction: column;
+    width: 100%;
+
+    button {
+      width: 100%;
+    }
+  }
+}
+
+.form-actions {
+  margin-top: 8px;
+}
+
+.place-order-btn {
+  width: 100%;
+  height: 56px;
+  font-size: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+
+  mat-spinner {
+    display: inline-block;
+  }
+}
+
+.order-summary-sidebar {
+  position: sticky;
+  top: 80px;
+
+  @media (max-width: 1024px) {
+    position: static;
+    order: -1;
+  }
+
+  mat-card {
+    border-radius: 12px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+
+    ::ng-deep {
+      .mat-mdc-card-header {
+        padding: 20px 20px 0;
+      }
+
+      .mat-mdc-card-title {
+        font-size: 20px;
+        font-weight: 600;
+        color: #2c3e50;
+      }
+
+      .mat-mdc-card-content {
+        padding: 20px;
+      }
+    }
+  }
+}
+
+.summary-items {
+  margin-bottom: 16px;
+}
+
+.summary-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 12px 0;
+  font-size: 14px;
+  color: #2c3e50;
+
+  .item-name {
+    flex: 1;
+  }
+
+  .item-price {
+    font-weight: 600;
+  }
+}
+
+.summary-totals {
+  margin-top: 16px;
+}
+
+.summary-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 12px 0;
+  font-size: 15px;
+  color: #2c3e50;
+
+  &.total-row {
+    padding-top: 16px;
+    font-size: 18px;
+    font-weight: 600;
+  }
+}
+
+.discount-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #00a878;
+}
+
+.discount-value {
+  color: #00a878;
+  font-weight: 600;
+}
+
+.remove-promo {
+  width: 20px;
+  height: 20px;
+  line-height: 20px;
+
+  mat-icon {
+    font-size: 16px;
+    width: 16px;
+    height: 16px;
+  }
+}
+
+.free-shipping {
+  color: #00a878;
+  font-weight: 600;
+}
+
+.total-amount {
+  font-size: 24px;
+  font-weight: 700;
+  color: #fb8c00;
+}

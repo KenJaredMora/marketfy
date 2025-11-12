@@ -1,1 +1,74 @@
-<p>wishlist works!</p>
+<div class="wishlist-page">
+  <div class="container">
+    <div class="wishlist-header">
+      <h1>
+        <mat-icon>favorite</mat-icon>
+        My Wishlist
+      </h1>
+      <p *ngIf="!loading()">{{ wl.count() }} {{ wl.count() === 1 ? 'item' : 'items' }} saved</p>
+    </div>
+
+    <!-- Loading State -->
+    <div *ngIf="loading()" class="loading-state">
+      <p>Loading your wishlist...</p>
+    </div>
+
+    <!-- Wishlist Items -->
+    <div *ngIf="!loading() && wl.items().length > 0" class="wishlist-grid">
+      <mat-card *ngFor="let item of wl.items()" class="wishlist-card">
+        <div class="wishlist-item">
+          <!-- Product Image -->
+          <a [routerLink]="['/products', item.productId]" class="item-image">
+            <img [src]="item.product.imageUrl || 'https://via.placeholder.com/300?text=' + item.product.name"
+                 [alt]="item.product.name">
+            <div class="image-overlay">
+              <mat-icon>visibility</mat-icon>
+              <span>View Details</span>
+            </div>
+          </a>
+
+          <!-- Product Info -->
+          <mat-card-content>
+            <a [routerLink]="['/products', item.productId]" class="item-name">
+              {{ item.product.name }}
+            </a>
+            <p class="item-description" *ngIf="item.product.description">
+              {{ item.product.description | slice:0:80 }}{{ item.product.description.length > 80 ? '...' : '' }}
+            </p>
+            <div class="item-price">
+              ${{ item.product.price | number:'1.2-2' }}
+            </div>
+          </mat-card-content>
+
+          <!-- Actions -->
+          <mat-card-actions>
+            <button mat-raised-button
+                    color="primary"
+                    (click)="moveToCart(item)"
+                    class="move-to-cart-btn">
+              <mat-icon>shopping_cart</mat-icon>
+              Move to Cart
+            </button>
+            <button mat-icon-button
+                    color="warn"
+                    (click)="remove(item.id, item.product.name)"
+                    [attr.aria-label]="'Remove ' + item.product.name">
+              <mat-icon>delete</mat-icon>
+            </button>
+          </mat-card-actions>
+        </div>
+      </mat-card>
+    </div>
+
+    <!-- Empty Wishlist State -->
+    <div *ngIf="!loading() && wl.items().length === 0" class="empty-wishlist">
+      <mat-icon class="empty-icon">favorite_border</mat-icon>
+      <h2>Your wishlist is empty</h2>
+      <p>Save items you love by clicking the heart icon on product cards!</p>
+      <a mat-raised-button color="primary" routerLink="/products">
+        <mat-icon>storefront</mat-icon>
+        Browse Products
+      </a>
+    </div>
+  </div>
+</div>
