@@ -1,0 +1,22 @@
+<div style="padding:16px">
+  <mat-form-field appearance="outline" style="width:100%;max-width:420px;">
+    <input matInput placeholder="Search products…" (input)="ps.search.set($any($event.target).value)" />
+  </mat-form-field>
+</div>
+
+<div class="grid">
+  <app-product-card
+    *ngFor="let p of ps.pageItems()"
+    [product]="p"
+    (addToCart)="add($event)">
+  </app-product-card>
+</div>
+
+<div style="display:flex;gap:8px;justify-content:center;align-items:center;padding:16px">
+  <button mat-stroked-button (click)="setPage(ps.page()-1)" [disabled]="ps.page()===1">Prev</button>
+  <span>Page {{ ps.page() }} / {{ totalPages }}</span>
+  <button mat-stroked-button
+          (click)="setPage(ps.page()+1)"
+          [disabled]="ps.page() >= totalPages">Next</button>
+</div>
+

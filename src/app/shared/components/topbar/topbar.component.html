@@ -1,1 +1,12 @@
-<p>topbar works!</p>
+<mat-toolbar color="primary">
+  <span class="brand">Marketfy</span>
+  <span class="spacer"></span>
+  <a mat-button routerLink="/products">Products</a>
+  <a mat-button routerLink="/wishlist">Wishlist</a>
+  <a mat-button routerLink="/orders">Orders</a>
+  <a mat-button routerLink="/users">Profile</a>
+  <a mat-stroked-button routerLink="/cart">
+    Cart <span *ngIf="cartCount$ | async as c">({{ c }})</span>
+  </a>
+  <a mat-flat-button color="accent" routerLink="/auth">Login</a>
+</mat-toolbar>
