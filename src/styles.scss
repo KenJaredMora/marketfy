@@ -1,8 +1,75 @@
 @use '@angular/material' as mat;
 @include mat.core();
 
-$primary: mat.m2-define-palette(mat.$m2-indigo-palette);
-$accent:  mat.m2-define-palette(mat.$m2-pink-palette, A200, A100, A400);
+// Custom E-Commerce Color Palette
+$marketfy-primary: (
+  50: #fff3e0,
+  100: #ffe0b2,
+  200: #ffcc80,
+  300: #ffb74d,
+  400: #ffa726,
+  500: #ff9800,
+  600: #fb8c00,
+  700: #f57c00,
+  800: #ef6c00,
+  900: #e65100,
+  A100: #ffd180,
+  A200: #ffab40,
+  A400: #ff9100,
+  A700: #ff6d00,
+  contrast: (
+    50: rgba(black, 0.87),
+    100: rgba(black, 0.87),
+    200: rgba(black, 0.87),
+    300: rgba(black, 0.87),
+    400: rgba(black, 0.87),
+    500: white,
+    600: white,
+    700: white,
+    800: white,
+    900: white,
+    A100: rgba(black, 0.87),
+    A200: rgba(black, 0.87),
+    A400: rgba(black, 0.87),
+    A700: white,
+  )
+);
+
+$marketfy-accent: (
+  50: #e3f2fd,
+  100: #bbdefb,
+  200: #90caf9,
+  300: #64b5f6,
+  400: #42a5f5,
+  500: #2196f3,
+  600: #1e88e5,
+  700: #1976d2,
+  800: #1565c0,
+  900: #0d47a1,
+  A100: #82b1ff,
+  A200: #448aff,
+  A400: #2979ff,
+  A700: #2962ff,
+  contrast: (
+    50: rgba(black, 0.87),
+    100: rgba(black, 0.87),
+    200: rgba(black, 0.87),
+    300: rgba(black, 0.87),
+    400: rgba(black, 0.87),
+    500: white,
+    600: white,
+    700: white,
+    800: white,
+    900: white,
+    A100: rgba(black, 0.87),
+    A200: white,
+    A400: white,
+    A700: white,
+  )
+);
+
+$primary: mat.m2-define-palette($marketfy-primary, 600);
+$accent:  mat.m2-define-palette($marketfy-accent, 600);
 $warn:    mat.m2-define-palette(mat.$m2-red-palette);
 
 $theme: mat.m2-define-light-theme((
@@ -12,6 +79,67 @@ $theme: mat.m2-define-light-theme((
 
 @include mat.all-component-themes($theme);
 
-.grid { display:grid; grid-template-columns: repeat(auto-fit,minmax(220px,1fr)); gap:16px; padding:16px; }
-.card { padding:16px; border:1px solid #eee; border-radius:8px; }
-.spacer { flex: 1 1 auto; }
+// Global Styles
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Roboto', sans-serif;
+  background-color: #f5f7fa;
+  color: #2c3e50;
+  line-height: 1.6;
+}
+
+// Utility Classes
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 24px;
+  padding: 24px;
+
+  @media (max-width: 768px) {
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 16px;
+    padding: 16px;
+  }
+}
+
+.card {
+  padding: 16px;
+  border: 1px solid #e8ecf1;
+  border-radius: 12px;
+  background: white;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
+
+  &:hover {
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+    transform: translateY(-2px);
+  }
+}
+
+.spacer {
+  flex: 1 1 auto;
+}
+
+.container {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 16px;
+}
+
+// Responsive breakpoints
+@media (max-width: 1024px) {
+  .container {
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding: 0 12px;
+  }
+}

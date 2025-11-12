@@ -1,18 +1,45 @@
-<mat-card class="product">
-  <div class="img-wrap">
-    <img [src]="product.imageUrl || 'https://via.placeholder.com/400x300?text=No+Image'" [alt]="product.name">
-    <button mat-icon-button class="heart" (click)="toggleWishlist($event)">
+<mat-card class="product-card">
+  <div class="image-container">
+    <img [src]="product.imageUrl || 'https://via.placeholder.com/400x300?text=' + product.name"
+         [alt]="product.name"
+         class="product-image"
+         [class.loaded]="imageLoaded"
+         (load)="onImageLoad()"
+         loading="lazy">
+    <div class="image-placeholder" *ngIf="!imageLoaded">
+      <mat-icon>image</mat-icon>
+    </div>
+    <button mat-icon-button
+            class="wishlist-button"
+            (click)="toggleWishlist($event)"
+            [class.wishlisted]="wishlisted()">
       <mat-icon>{{ wishlisted() ? 'favorite' : 'favorite_border' }}</mat-icon>
     </button>
+    <div class="overlay">
+      <a mat-raised-button
+         color="accent"
+         [routerLink]="['/products', product.id]"
+         class="quick-view">
+        <mat-icon>visibility</mat-icon>
+        Quick View
+      </a>
+    </div>
   </div>
 
-  <mat-card-content>
-    <div class="name">{{ product.name }}</div>
-    <div class="price">{{ product.price | currency }}</div>
+  <mat-card-content class="product-content">
+    <h3 class="product-name">{{ product.name }}</h3>
+    <p class="product-description" *ngIf="product.description">
+      {{ product.description | slice:0:60 }}{{ product.description?.length > 60 ? '...' : '' }}
+    </p>
+    <div class="product-footer">
+      <span class="product-price">${{ product.price | number:'1.2-2' }}</span>
+      <button mat-mini-fab
+              color="primary"
+              (click)="addToCart.emit(product)"
+              class="add-to-cart-btn"
+              [attr.aria-label]="'Add ' + product.name + ' to cart'">
+        <mat-icon>add_shopping_cart</mat-icon>
+      </button>
+    </div>
   </mat-card-content>
-
-  <mat-card-actions>
-    <button mat-raised-button color="primary" (click)="addToCart.emit(product)">Add to cart</button>
-    <a mat-button [routerLink]="['/products', product.id]">Details</a>
-  </mat-card-actions>
 </mat-card>

@@ -7,7 +7,7 @@ export const routes: Routes = [
 
   {
     path: 'products',
-    canActivate: [authGuard], // <- opcional proteger
+    // Public route - no auth required
     loadComponent: () =>
       import('./features/products/pages/products-list/products-list.component')
         .then(m => m.ProductsListComponent),
@@ -15,7 +15,7 @@ export const routes: Routes = [
 
   {
     path: 'products/:id',
-    canActivate: [authGuard], // <- opcional proteger
+    // Public route - no auth required
     loadComponent: () =>
       import('./features/products/pages/product-detail/product-detail.component')
         .then(m => m.ProductDetailComponent),

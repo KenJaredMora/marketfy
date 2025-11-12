@@ -1,0 +1,172 @@
+.products-page {
+  min-height: calc(100vh - 64px);
+  background: #f5f7fa;
+  padding-bottom: 48px;
+}
+
+.search-section {
+  background: linear-gradient(135deg, #fb8c00 0%, #f57c00 100%);
+  color: white;
+  padding: 48px 0 32px;
+  margin-bottom: 32px;
+
+  @media (max-width: 768px) {
+    padding: 32px 0 24px;
+    margin-bottom: 24px;
+  }
+}
+
+.page-title {
+  font-size: 36px;
+  font-weight: 700;
+  margin: 0 0 24px;
+  text-align: center;
+
+  @media (max-width: 768px) {
+    font-size: 28px;
+    margin-bottom: 16px;
+  }
+}
+
+.search-bar {
+  max-width: 600px;
+  margin: 0 auto 16px;
+}
+
+.search-field {
+  width: 100%;
+
+  ::ng-deep {
+    .mat-mdc-form-field {
+      width: 100%;
+    }
+
+    .mat-mdc-text-field-wrapper {
+      background: white;
+      border-radius: 28px;
+      overflow: hidden;
+    }
+
+    .mat-mdc-form-field-flex {
+      padding: 0 20px;
+    }
+
+    .mat-mdc-form-field-infix {
+      padding: 14px 0;
+    }
+
+    input {
+      font-size: 16px;
+    }
+
+    .mat-icon {
+      color: #fb8c00;
+    }
+  }
+}
+
+.results-info {
+  text-align: center;
+  font-size: 14px;
+  opacity: 0.95;
+}
+
+.results-count {
+  background: rgba(255, 255, 255, 0.2);
+  padding: 8px 16px;
+  border-radius: 20px;
+  display: inline-block;
+}
+
+.loading-overlay {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 80px 20px;
+  min-height: 400px;
+
+  mat-spinner {
+    margin-bottom: 24px;
+  }
+
+  .loading-text {
+    font-size: 16px;
+    color: #7f8c8d;
+    margin: 0;
+    animation: pulse 1.5s ease-in-out infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+  }
+}
+
+.grid-loading {
+  opacity: 0;
+  pointer-events: none;
+  min-height: 400px;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 80px 20px;
+
+  .empty-icon {
+    font-size: 120px;
+    width: 120px;
+    height: 120px;
+    color: #ddd;
+    margin: 0 auto 24px;
+  }
+
+  h2 {
+    font-size: 24px;
+    color: #2c3e50;
+    margin: 0 0 12px;
+  }
+
+  p {
+    font-size: 16px;
+    color: #7f8c8d;
+    margin: 0;
+  }
+}
+
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 40px 16px;
+  margin-top: 32px;
+
+  button {
+    &[disabled] {
+      opacity: 0.5;
+    }
+  }
+
+  .page-info {
+    font-size: 15px;
+    font-weight: 500;
+    color: #2c3e50;
+    padding: 0 16px;
+  }
+
+  @media (max-width: 600px) {
+    flex-wrap: wrap;
+    gap: 8px;
+
+    button mat-icon + * {
+      display: none;
+    }
+
+    .page-info {
+      width: 100%;
+      text-align: center;
+      padding: 8px 0;
+    }
+  }
+}
