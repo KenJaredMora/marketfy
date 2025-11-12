@@ -1,1 +1,18 @@
-<p>product-card works!</p>
+<mat-card class="product">
+  <div class="img-wrap">
+    <img [src]="product.imageUrl || 'https://via.placeholder.com/400x300?text=No+Image'" [alt]="product.name">
+    <button mat-icon-button class="heart" (click)="toggleWishlist($event)">
+      <mat-icon>{{ wishlisted() ? 'favorite' : 'favorite_border' }}</mat-icon>
+    </button>
+  </div>
+
+  <mat-card-content>
+    <div class="name">{{ product.name }}</div>
+    <div class="price">{{ product.price | currency }}</div>
+  </mat-card-content>
+
+  <mat-card-actions>
+    <button mat-raised-button color="primary" (click)="addToCart.emit(product)">Add to cart</button>
+    <a mat-button [routerLink]="['/products', product.id]">Details</a>
+  </mat-card-actions>
+</mat-card>

@@ -1,0 +1,11 @@
+.product {
+  .img-wrap { position: relative; }
+  .heart {
+    position: absolute;
+    right: 6px;
+    top: 6px;
+    background: rgba(255,255,255,0.8);
+  }
+  .name { font-weight: 600; margin-top: 8px; }
+  .price { opacity: 0.8; }
+}

@@ -1,18 +1,52 @@
-import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
-import type { Product } from '../products/products.service';
+import { Injectable, signal } from '@angular/core';
+import { ApiService } from '../../core/services/api.service';
+import { tap } from 'rxjs/operators';
 
-const KEY='marketfy_wishlist';
+export interface WishlistItemDTO {
+  id: number;
+  userId: number;
+  productId: number;
+  createdAt: string;
+  product: {
+    id: number;
+    name: string;
+    price: number;
+    imageUrl?: string;
+    description?: string;
+  };
+}
 
 @Injectable({ providedIn: 'root' })
 export class WishlistService {
-  private subject = new BehaviorSubject<Product[]>(this.read());
-  items$ = this.subject.asObservable();
+  items = signal<WishlistItemDTO[]>([]);
 
-  toggle(p:Product){ const xs=[...this.subject.value]; const i=xs.findIndex(x=>x.id===p.id);
-    i>=0 ? xs.splice(i,1) : xs.push(p); this.commit(xs); }
-  remove(id:number){ this.commit(this.subject.value.filter(x=>x.id!==id)); }
-  clear(){ this.commit([]); }
-  private commit(xs:Product[]){ this.subject.next(xs); localStorage.setItem(KEY, JSON.stringify(xs)); }
-  private read():Product[]{ try{ return JSON.parse(localStorage.getItem(KEY)||'[]'); }catch{ return []; } }
+  constructor(private api: ApiService) {}
+
+  private get userId(): number {
+    return Number(localStorage.getItem('userId') || 1);
+  }
+
+  load() {
+    return this.api.get<WishlistItemDTO[]>('/wishlist', { userId: this.userId })
+      .pipe(tap(list => this.items.set(list)));
+  }
+
+  isInWishlist(productId: number): boolean {
+    return !!this.items().find(i => i.productId === productId);
+  }
+
+  add(productId: number) {
+    return this.api.post('/wishlist', { userId: this.userId, productId })
+      .pipe(tap(() => this.load().subscribe()));
+  }
+
+  removeByProduct(productId: number) {
+    return this.api.delete('/wishlist', { userId: String(this.userId), productId: String(productId) })
+      .pipe(tap(() => this.load().subscribe()));
+  }
+
+  removeById(id: number) {
+    return this.api.delete(`/wishlist/${id}`, { userId: String(this.userId) })
+      .pipe(tap(() => this.load().subscribe()));
+  }
 }

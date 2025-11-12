@@ -6,6 +6,7 @@ import { MatInputModule } from '@angular/material/input';
 import { ProductsService } from '../../products.service';
 import { CartService } from '../../../cart/cart.service';
 import { ProductCardComponent } from '../../components/product-card/product-card.component';
+import { WishlistService } from '../../../wishlist/wishlist.service';
 
 @Component({
   selector: 'app-products-list',
@@ -15,7 +16,9 @@ import { ProductCardComponent } from '../../components/product-card/product-card
   styleUrl: './products-list.component.scss',
 })
 export class ProductsListComponent {
-  constructor(public ps: ProductsService, private cart: CartService) {}
+  constructor(public ps: ProductsService, private cart: CartService, private wishlist: WishlistService) {
+    this.wishlist.load().subscribe();
+  }
   add(p:any) { this.cart.add(p, 1); }
   setPage(n:number){ this.ps.page.set(n); }
 

@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  apiBase: (window as any)['API_BASE'] || ''
+  apiBase: 'https://YOUR-PROD-API', // cuando se tenga prod
 };

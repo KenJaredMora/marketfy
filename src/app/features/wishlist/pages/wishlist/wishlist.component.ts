@@ -1,36 +1,54 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { MatButtonModule } from '@angular/material/button';
 import { WishlistService } from '../../wishlist.service';
+import { MatListModule } from '@angular/material/list';
+import { MatButtonModule } from '@angular/material/button';
+import { RouterLink } from '@angular/router';
 import { CartService } from '../../../cart/cart.service';
 
 @Component({
   standalone: true,
   selector: 'app-wishlist',
-  imports: [CommonModule, MatButtonModule],
+  imports: [CommonModule, MatListModule, MatButtonModule, RouterLink],
   template: `
-  <div style="max-width:900px;margin:auto;padding:16px">
-    <h2>Wishlist</h2>
-    <div *ngIf="(wl.items$ | async) as items; else empty">
-      <div *ngFor="let p of items" class="card">
-        <div style="display:flex;justify-content:space-between;align-items:center">
-          <div>
-            <h3>{{ p.name }}</h3>
-            <p>{{ p.price | currency }}</p>
-          </div>
-          <div style="display:flex;gap:8px">
-            <button mat-stroked-button (click)="wl.toggle(p)">Remove</button>
-            <button mat-raised-button color="primary" (click)="moveToCart(p)">Add to cart</button>
-          </div>
-        </div>
-      </div>
-    </div>
-    <ng-template #empty><p style="padding:24px;text-align:center">No items yet.</p></ng-template>
+  <div style="max-width:720px;margin:auto;padding:16px">
+    <h2>Your wishlist</h2>
+    <ng-container *ngIf="wl.items().length; else empty">
+      <mat-nav-list>
+        <div mat-subheader>{{ wl.items().length }} item(s)</div>
+
+        <a mat-list-item *ngFor="let it of wl.items()" [routerLink]="['/products', it.productId]">
+          <span matListItemTitle>{{ it.product.name }}</span>
+          <span matListItemLine>{{ it.product.price | currency }}</span>
+          <span class="spacer"></span>
+          <button mat-stroked-button color="primary" (click)="addToCart($event, it.product)">Add to cart</button>
+          <button mat-button color="warn" (click)="remove($event, it.id)">Remove</button>
+        </a>
+      </mat-nav-list>
+    </ng-container>
+
+    <ng-template #empty>
+      <div>No items yet. Browse <a routerLink="/products">products</a>.</div>
+    </ng-template>
   </div>
   `,
-  styles:[`.card{padding:16px;border:1px solid #eee;border-radius:8px;margin-bottom:12px}`]
+  styles:[`
+    .spacer { flex: 1 1 auto; }
+    a[mat-list-item] { align-items: center; }
+  `]
 })
 export class WishlistComponent {
-  constructor(public wl: WishlistService, private cart: CartService) {}
-  moveToCart(p:any){ this.cart.add(p,1); this.wl.toggle(p); }
+  constructor(public wl: WishlistService, private cart: CartService) {
+    this.wl.load().subscribe();
+  }
+
+  addToCart(ev: MouseEvent, product: any) {
+    ev.preventDefault(); ev.stopPropagation();
+    this.cart.add(product, 1);
+  }
+
+  remove(ev: MouseEvent, id: number) {
+    ev.preventDefault(); ev.stopPropagation();
+    this.wl.removeById(id).subscribe();
+  }
 }
