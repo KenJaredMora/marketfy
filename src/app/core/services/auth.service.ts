@@ -1,4 +1,4 @@
-import { Injectable, signal } from '@angular/core';
+import { Injectable, signal, Injector, inject } from '@angular/core';
 import { ApiService } from './api.service';
 import { jwtDecode } from 'jwt-decode';        // 🔸 named export
 import { tap } from 'rxjs/operators';
@@ -11,8 +11,8 @@ export interface JwtPayload { sub: string; email: string; exp: number; }
 @Injectable({ providedIn: 'root' })
 export class AuthService {
   token = signal<string | null>(localStorage.getItem('token'));
-
-  constructor(private api: ApiService) {}
+  private api = inject(ApiService);
+  private injector = inject(Injector);
 
   // return observable; do side-effects in tap
   login(dto: LoginDTO): Observable<{ access_token: string; userId?: number }> {
@@ -21,6 +21,8 @@ export class AuthService {
         this.token.set(access_token);
         localStorage.setItem('token', access_token);
         if (userId) localStorage.setItem('userId', String(userId));
+        // Reload cart for the new user
+        this.reloadUserData();
       })
     );
   }
@@ -33,6 +35,8 @@ export class AuthService {
     this.token.set(null);
     localStorage.removeItem('token');
     localStorage.removeItem('userId');
+    // Clear cart when logging out
+    this.reloadUserData();
   }
 
   isAuthenticated(): boolean {
@@ -44,5 +48,14 @@ export class AuthService {
     } catch {
       return false;
     }
+  }
+
+  // Reload user-specific data (cart) when user changes
+  private reloadUserData() {
+    // Use dynamic import to avoid circular dependency
+    import('../../features/cart/cart.service').then(({ CartService }) => {
+      const cartService = this.injector.get(CartService);
+      cartService.reloadCart();
+    });
   }
 }

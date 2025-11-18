@@ -3,7 +3,7 @@ import { BehaviorSubject, map } from 'rxjs';
 import type { Product } from '../products/products.service';
 
 export interface CartItem { product: Product; qty: number; }
-const KEY='marketfy_cart';
+const KEY_PREFIX = 'marketfy_cart';
 
 @Injectable({ providedIn: 'root' })
 export class CartService {
@@ -19,6 +19,28 @@ export class CartService {
   updateQty(id:number, qty:number){ this.commit(this.subject.value.map(x=>x.product.id===id?{...x,qty}:x)); }
   remove(id:number){ this.commit(this.subject.value.filter(x=>x.product.id!==id)); }
   clear(){ this.commit([]); }
-  private commit(xs:CartItem[]){ this.subject.next(xs); localStorage.setItem(KEY, JSON.stringify(xs)); }
-  private read():CartItem[]{ try{ return JSON.parse(localStorage.getItem(KEY)||'[]'); }catch{ return []; } }
+
+  // Reload cart when user changes (login/logout)
+  reloadCart() {
+    this.subject.next(this.read());
+  }
+
+  private commit(xs:CartItem[]){
+    this.subject.next(xs);
+    localStorage.setItem(this.getKey(), JSON.stringify(xs));
+  }
+
+  private read():CartItem[]{
+    try{
+      return JSON.parse(localStorage.getItem(this.getKey())||'[]');
+    } catch {
+      return [];
+    }
+  }
+
+  // Get user-specific cart key
+  private getKey(): string {
+    const userId = localStorage.getItem('userId');
+    return userId ? `${KEY_PREFIX}_${userId}` : KEY_PREFIX;
+  }
 }
