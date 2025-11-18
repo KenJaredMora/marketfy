@@ -71,9 +71,9 @@ export const routes: Routes = [
 
   {
     path: 'auth',
-    loadComponent: () =>
-      import('./features/auth/pages/login/login.component')
-        .then(m => m.LoginComponent),
+    loadChildren: () =>
+      import('./features/auth/auth.routes')
+        .then(m => m.AUTH_ROUTES),
   },
 
   { path: '**', redirectTo: 'products' },
