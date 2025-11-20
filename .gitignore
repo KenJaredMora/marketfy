@@ -1,17 +1,45 @@
-# See https://docs.github.com/get-started/getting-started-with-git/ignoring-files for more about ignoring files.
+# ====================================================================================
+# MARKETFY ANGULAR .GITIGNORE
+# ====================================================================================
+# See https://docs.github.com/get-started/getting-started-with-git/ignoring-files
 
-# Compiled output
+# ====================================================================================
+# ⚠️ SENSITIVE FILES - StayInLocal - NEVER COMMIT THESE ⚠️
+# ====================================================================================
+
+# Environment Variables - StayInLocal (API URLs, keys, tokens)
+.env
+.env.*
+.env.local
+.env.development
+.env.production
+.env.test
+!.env.example
+
+# AWS & Credentials - StayInLocal
+.aws/
+*.pem
+*.key
+credentials
+
+# ====================================================================================
+# Compiled Output
+# ====================================================================================
 /dist
 /tmp
 /out-tsc
 /bazel-out
 
-# Node
+# ====================================================================================
+# Node Modules
+# ====================================================================================
 /node_modules
 npm-debug.log
 yarn-error.log
 
-# IDEs and editors
+# ====================================================================================
+# IDEs and Editors
+# ====================================================================================
 .idea/
 .project
 .classpath
@@ -28,7 +56,9 @@ yarn-error.log
 !.vscode/extensions.json
 .history/*
 
+# ====================================================================================
 # Miscellaneous
+# ====================================================================================
 /.angular/cache
 .sass-cache/
 /connect.lock
@@ -37,6 +67,9 @@ yarn-error.log
 testem.log
 /typings
 
-# System files
+# ====================================================================================
+# System Files
+# ====================================================================================
 .DS_Store
 Thumbs.db
+*~
