@@ -55,13 +55,21 @@
   }
 }
 
+.wishlist-button,
 .cart-button {
   position: relative;
+  margin-right: 4px;
 
   mat-icon {
     font-size: 24px;
     width: 24px;
     height: 24px;
+  }
+
+  // Ensure badge doesn't overflow above the toolbar
+  ::ng-deep .mat-badge-content {
+    right: -4px !important;
+    top: 2px !important;
   }
 }
 
@@ -86,6 +94,7 @@
 @media (max-width: 768px) {
   .topbar-container {
     padding: 0 8px;
+    gap: 4px;
   }
 
   .brand-text {
@@ -106,6 +115,21 @@
   .login-btn span {
     display: none;
   }
+
+  // Adjust badge positioning for mobile
+  .wishlist-button,
+  .cart-button {
+    margin-right: 2px;
+
+    ::ng-deep .mat-badge-content {
+      right: -2px !important;
+      top: 4px !important;
+      min-width: 16px !important;
+      height: 16px !important;
+      line-height: 16px !important;
+      font-size: 10px !important;
+    }
+  }
 }
 
 @media (max-width: 480px) {
@@ -114,6 +138,29 @@
   }
 
   .topbar-container {
-    gap: 8px;
+    gap: 4px;
+    padding: 0 4px;
+  }
+
+  // Extra small badges for very small screens
+  .wishlist-button,
+  .cart-button {
+    margin-right: 0;
+
+    mat-icon {
+      font-size: 22px;
+      width: 22px;
+      height: 22px;
+    }
+
+    ::ng-deep .mat-badge-content {
+      right: 0 !important;
+      top: 6px !important;
+      min-width: 14px !important;
+      height: 14px !important;
+      line-height: 14px !important;
+      font-size: 9px !important;
+      padding: 0 3px !important;
+    }
   }
 }

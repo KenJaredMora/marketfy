@@ -25,14 +25,22 @@
     <span class="spacer"></span>
 
     <!-- Wishlist Button with Badge -->
-    <a mat-icon-button routerLink="/wishlist" class="wishlist-button" [matBadge]="wishlistCount()"
-       [matBadgeHidden]="wishlistCount() === 0" matBadgeColor="accent">
+    <a mat-icon-button routerLink="/wishlist" class="wishlist-button"
+       [matBadge]="wishlistCount()"
+       [matBadgeHidden]="wishlistCount() === 0"
+       matBadgeColor="accent"
+       matBadgeSize="small"
+       matBadgePosition="above after">
       <mat-icon>favorite</mat-icon>
     </a>
 
     <!-- Cart Button with Badge -->
-    <a mat-icon-button routerLink="/cart" class="cart-button" [matBadge]="(cartCount$ | async) || 0"
-       [matBadgeHidden]="!(cartCount$ | async)" matBadgeColor="warn">
+    <a mat-icon-button routerLink="/cart" class="cart-button"
+       [matBadge]="(cartCount$ | async) || 0"
+       [matBadgeHidden]="!(cartCount$ | async)"
+       matBadgeColor="warn"
+       matBadgeSize="small"
+       matBadgePosition="above after">
       <mat-icon>shopping_cart</mat-icon>
     </a>
 
