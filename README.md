@@ -1,4 +1,19 @@
-# Marketfy
+# Marketfy - Angular Frontend
+
+Modern e-commerce platform built with Angular 19, featuring product catalog, shopping cart, authentication, and order management.
+
+## 🌐 Production Deployment
+
+**Live App**: <http://marketfy-alb-1492993669.us-east-1.elb.amazonaws.com/>
+
+**Demo Credentials:**
+
+- Email: `demo@marketfy.test`
+- Password: `password123`
+
+Deployed on AWS ECS with Docker containers and served via Application Load Balancer.
+
+---
 
 This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.2.19.
 
