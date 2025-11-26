@@ -1,8 +1,8 @@
-import { Injectable, signal, Injector, inject } from '@angular/core';
-import { ApiService } from './api.service';
-import { jwtDecode } from 'jwt-decode';        // 🔸 named export
-import { tap } from 'rxjs/operators';
+import { Injectable, Injector, inject, signal } from '@angular/core';
+import { jwtDecode } from 'jwt-decode';
 import { Observable } from 'rxjs';
+import { tap } from 'rxjs/operators';
+import { ApiService } from './api.service';
 
 export interface LoginDTO { email: string; password: string; }
 export interface RegisterDTO { email: string; password: string; displayName: string; }

@@ -1,10 +1,9 @@
-// src/app/core/services/api.service.ts
-import { inject, Injectable } from '@angular/core';
 import {
   HttpClient,
   HttpHeaders,
   HttpParams,
 } from '@angular/common/http';
+import { inject, Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment';
 
 export type ApiQuery =

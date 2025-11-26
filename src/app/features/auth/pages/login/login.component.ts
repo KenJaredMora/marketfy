@@ -1,9 +1,9 @@
-import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Component } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { MatButtonModule } from '@angular/material/button';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../../../core/services/auth.service';
 
@@ -11,7 +11,7 @@ import { AuthService } from '../../../../core/services/auth.service';
   standalone: true,
   selector: 'app-login',
   imports: [CommonModule, ReactiveFormsModule, MatFormFieldModule, MatInputModule, MatButtonModule, RouterLink],
-  // 🔸 remove providers: [AuthService] to avoid a new instance
+  // we should remove providers: [AuthService] to avoid a new instance
   template: `
   <div style="max-width:420px;margin:auto;padding:16px">
     <h2>Login</h2>
@@ -26,7 +26,7 @@ import { AuthService } from '../../../../core/services/auth.service';
       <a routerLink="/auth/register" style="margin-left:12px">Create account</a>
     </form>
   </div>`,
-  styles:[`.w{width:100%}`]
+  styles: [`.w{width:100%}`]
 })
 export class LoginComponent {
   // type-safe, non-nullable form
@@ -44,7 +44,7 @@ export class LoginComponent {
     const { email, password } = this.form.getRawValue();
     this.auth.login({ email, password }).subscribe({
       next: () => this.router.navigate(['/products']),
-      error: () => {/* optionally show a snackbar/toast */},
+      error: () => {/* optionally show a snackbar/toast */ },
     });
   }
 }
