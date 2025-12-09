@@ -6,7 +6,7 @@ Modern e-commerce platform built with Angular 19, featuring product catalog, sho
 
 **Live App**: <http://marketfy-alb-1492993669.us-east-1.elb.amazonaws.com/>
 
-Note: For security purposes just reacheable with IP.
+    Note: For security purposes just reacheable with IP.
 
 **Demo Credentials:**
 
