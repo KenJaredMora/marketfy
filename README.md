@@ -1,4 +1,4 @@
-# Marketfy - Angular Frontend
+# Marketfy - Angular Frontend Project
 
 Modern e-commerce platform built with Angular 19, featuring product catalog, shopping cart, authentication, and order management.
 
